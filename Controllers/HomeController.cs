@@ -80,7 +80,7 @@ namespace DevSumScheduler.Controllers {
         }
 
         public ActionResult About() {
-            ViewBag.Title = "Om";
+            ViewBag.Title = "About";
             return View();
         }
     }
