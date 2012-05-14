@@ -48,17 +48,18 @@ namespace DevSumScheduler.Controllers {
 
                 var itemsRows = table.SelectNodes("tbody/tr");
 
-                var items = ParseItem(itemsRows).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                var items = ParseItems(itemsRows).ToDictionary(kvp => kvp.Key,
+                    kvp => kvp.Value.GroupBy(x => x.Title).Select(x => x.First()));
                 
                 yield return new ScheduleTable {
                     Headers = headerItems.Skip(1).Select(item => item.InnerText),
                     Rows = items,
-                    Title = headerItems.First().InnerText,
+                    Title = headerItems.First().InnerText.Replace("dag", "d."),
                 };
             }
         }
 
-        private IEnumerable<KeyValuePair<string, IEnumerable<ScheduleItem>>> ParseItem(HtmlNodeCollection itemsRows) {
+        private IEnumerable<KeyValuePair<string, IEnumerable<ScheduleItem>>> ParseItems(HtmlNodeCollection itemsRows) {
             foreach(var row in itemsRows) {
                 var time = row.SelectSingleNode("th").InnerText;
                 var tdTables = row.SelectNodes("td/table");
@@ -70,7 +71,7 @@ namespace DevSumScheduler.Controllers {
                              let speakerUrl = speakerNode.Attributes["href"].Value
                              select new ScheduleItem {
                                  Speaker = speaker,
-                                 SpeakerUrl = speakerUrl,
+                                 SpeakerUrl = (string.IsNullOrWhiteSpace(speakerUrl) || speakerUrl.StartsWith("?")) ? null : speakerUrl,
                                  Title = title,
                              };
 

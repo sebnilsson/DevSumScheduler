@@ -31,12 +31,12 @@
 </head>
 <body>
     <div id="no-js-message">
-        <strong>Din webläsare stödjer inte JavaScript</strong>,
-        så denna sida har nog inte mycket värde för dig.
+        <strong>Your browser doesn't support JavaScript</strong>,
+        so this website's special features cannot be used.
     </div>
     <div id="no-localstorage-message">
-        <strong>Din webläsare stödjer inte <a href="http://www.w3.org/TR/webstorage/">LocalStorage</a></strong>,
-        så inställningar på sidan kan inte sparas.
+        <strong>Your browser doesn't support <a href="http://www.w3.org/TR/webstorage/">LocalStorage</a></strong>,
+        so you cannot save your preferences.
     </div>
     <div id="messages">
         @*<div>Test-message with content goes here</div>*@
@@ -44,18 +44,21 @@
     <header>
         <nav>
             <ul id="menu">
-                <li>@Html.ActionLink("Schema", "Index", "Home")</li>
-                <li>@Html.ActionLink("Om", "About", "Home")</li>
+                <li>@Html.ActionLink("Schedule", "Index", "Home")</li>
+                <li>@Html.ActionLink("About", "About", "Home")</li>
             </ul>
         </nav>
     </header>
     <div id="main-wrapper">
-        <section class="main-content">
+        <section id="main-content">
             @RenderBody()
+        </section>
+        <section id="devsum-link">
+            Original data retrieved from <a href="http://devsum.se/schema/">DevSum's schedule</a>.
         </section>
     </div>
     <footer>
-        © Copyright @DateTime.Today.Year Seb Nilsson
+        © Copyright @DateTime.Today.Year <a href="http://www.sebnilsson.com">Seb Nilsson</a>, who you can also <a href="http://www.twitter.com/sebnilsson">follow on Twitter</a>
     </footer>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>

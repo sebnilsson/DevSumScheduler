@@ -5,15 +5,28 @@
     margin-right: auto;
 }
 
+a:visited {
+    color: #0000EE;
+}
+
 @media screen and (max-width: 320px) {
     body{
         font-size: 0.5em;
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 640px) {
     body{
         font-size: 0.6em;
+    }
+    header {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body{
+        font-size: 0.7em;
     }
 }
 
@@ -64,51 +77,85 @@ nav ul li a, nav ul li a:hover, nav ul li a:active, nav ul li a:visited {
     color: #fff;
 }
 
+#main-wrapper {
+    padding: 0.5em 0;
+}
+
 table {
-    margin: 0.5em 0px;
-    border: 1px solid #000000;
+    margin: 1em 0px;
+    border-top: 2px solid #000;
+    border-right: 1px solid #000;
+    border-bottom: 2px solid #000;
+    border-left: 1px solid #000;
     width: 100%;
 }
-table thead {
+table thead, table tfoot {
     background-color: #ccc;
 }
 
-table thead .table-title {
+.table-title {
     background-color: #000;
     color: #fff;
     font-size: 0.8em;
     font-weight: bold;
     width: 3em;
 }
-table thead .table-header {
+.table-header {
     font-weight: bold;
     padding: 0 3px;
+    text-align: center;
 }
 
-table tr {
+table tbody tr, table thead tr {
     border-bottom: 1px solid #000;
 }
 
-table tbody .row-item.single-row-item, table tbody .row-item.selected-row-item {
+table tbody .row-item.single-row-item {
+    background-color: #FFE77C;
+}
+
+table tbody .row-item.selected-row-item {
     background-color: #4FFF63;
 }
 
 table tbody .row-item-time {
     background-color: #ccc;
     border-right: 1px solid #000;
+    font-size: 0.9em;
 }
 
 table tbody .row-item {
     padding: 0 3px;
+    vertical-align: middle;
+}
+
+table tbody .row-item:nth-child(3), table td.table-header:nth-child(3) {
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
 }
 
 table tbody .row-item .item-speaker {
     font-size: 0.8em;
+    display: block;
+    text-align: right;
 }
 
 body.has-localstorage table .row-item {
     cursor: pointer;
+    text-align: center;
 }
 body.has-localstorage table .row-item.single-row-item {
     cursor: inherit;
+}
+
+body.has-localstorage table tr.has-selected-item .row-item:not(.selected-row-item) {
+    color: #555;
+}
+
+footer {
+    background-color: #000;
+    color: #fff;
+    font-size: 0.9em;
+    margin-top: 0.5em;
+    padding: 5px 10px;
 }

@@ -6,18 +6,22 @@
     };
 }
 
+@helper RenderHeaderRow(string tableTitle, IEnumerable<string> headers) {
+    <tr>
+        <td class="table-title">@tableTitle
+        </td>
+        @foreach(var header in headers) {
+            <td class="table-header">@header
+            </td>
+        }
+    </tr>
+}
+
 <div id="schedule-tables">
     @foreach(var table in Model) {
         <table>
             <thead>
-                <tr>
-                    <td class="table-title">@table.Title
-                    </td>
-                    @foreach(var header in table.Headers) {
-                        <td class="table-header">@header
-                        </td>
-                    }
-                </tr>
+                @RenderHeaderRow(table.Title, table.Headers)
             </thead>
             <tbody>
                 @foreach(var row in table.Rows) {
@@ -26,15 +30,27 @@
                         </td>
                         @foreach(var item in row.Value) {
                             var singleItemClass = (row.Value.Count() <= 1) ? "row-item single-row-item" : "row-item";
-                            <td class="@singleItemClass">
+                            var colspan = (row.Value.Count() <= 1) ? "3" : null;
+                            <td class="@singleItemClass" colspan="@colspan">
                                 <span class="item-title">@item.Title</span>
                                 <div class="clear"></div>
-                                <span class="item-speaker"><a href="@item.SpeakerUrl">@item.Speaker</a></span>
+                                <span class="item-speaker">
+                                    @if(!string.IsNullOrWhiteSpace(item.SpeakerUrl)) {
+                                        <a href="@item.SpeakerUrl">@item.Speaker</a>
+                                    } else {
+                                        @item.Speaker
+                                    }                                    
+                                </span>
                             </td>
                         }
                     </tr>
                 }
             </tbody>
+            @if(table.Rows.Count > 1) {
+                <tfoot>
+                    @RenderHeaderRow(table.Title, table.Headers)
+                </tfoot>
+            }
         </table>
     }
 </div>

@@ -8,6 +8,9 @@
     }
 });
 
+var selectedRowItemClass = 'selected-row-item';
+var hasSelectedItemClass = 'has-selected-item';
+
 var initScheduler = function () {
     'use strict';
     restoreSchedule();
@@ -16,30 +19,50 @@ var initScheduler = function () {
         var $this = $(this);
         var $parent = $this.parent();
 
-        $parent.children().removeClass('selected-row-item');
-        $this.addClass('selected-row-item');
+        var isSelected = $this.hasClass(selectedRowItemClass);
+
+        $parent.children().removeClass(selectedRowItemClass);
+
+        $this.toggleClass(selectedRowItemClass, !isSelected);
+        $parent.toggleClass(hasSelectedItemClass, !isSelected);
 
         var id = $parent.attr('data-row-id');
-        var index = $parent.children('td').index($this);
 
-        storeSchedule(id, index);
+        if (!isSelected) {
+            var index = $parent.children('td').index($this);
+            storeSchedule(id, index);
+        } else {
+            removeSchedule(id);
+        }
     });
 };
 
 var restoreSchedule = function () {
     'use strict';
-
     for (var key in localStorage) {
         var value = parseInt(localStorage[key]);
         if (!isNaN(value)) {
-            var item = $('tr[data-row-id="' + key + '"] td')[value];
-            $(item).addClass('selected-row-item');
+            var siblingItems = $('tr[data-row-id="' + key + '"] td');
+            if (siblingItems.length > 1) {
+                var $item = $(siblingItems[value]);
+                if ($item) {
+                    $item.addClass(selectedRowItemClass);
+                    $item.parent().addClass(hasSelectedItemClass);
+                    continue;
+                }
+            }
+            removeSchedule(key, value);
         }
     }
 };
 
-var storeSchedule = function (id, index) {
+var storeSchedule = function (key, index) {
     'use strict';
+    localStorage[key] = index;
+};
 
-    localStorage[id] = index;
+
+var removeSchedule = function (key, index) {
+    'use strict';
+    delete localStorage[key];
 };
