@@ -1,0 +1,114 @@
+﻿body {
+    font-family: 'Trebuchet MS', Arial, 'Sans-Serif';
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media screen and (max-width: 320px) {
+    body{
+        font-size: 0.5em;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body{
+        font-size: 0.6em;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    body{
+        font-size: 0.8em;
+    }
+}
+
+.clear { clear: both; }
+
+#messages div, #no-js-message, #no-localstorage-message {
+    background-color: #F7F26C;
+    border-bottom: 2px solid #000000;
+    margin: 0;
+    padding: 5px;
+    width: 100%;
+}
+
+#messages div.warning, #no-js-message, #no-localstorage-message {
+    background-color: #FF5C54;
+}
+
+#no-localstorage-message, html.no-js #no-localstorage-message {
+    display: none;
+}
+
+body#no-localstorage #no-localstorage-message {
+    display: inherit;
+}
+
+html.js #no-js-message {
+    display: none;
+}
+
+nav ul {
+    background-color: #000;
+    list-style: none outside none;
+    padding: 10px 0px;
+}
+
+nav ul li {
+    display: inline;
+    padding: 0px 5px;
+}
+
+nav ul li a, nav ul li a:hover, nav ul li a:active, nav ul li a:visited {
+    color: #fff;
+}
+
+table {
+    margin: 0.5em 0px;
+    border: 1px solid #000000;
+    width: 100%;
+}
+table thead {
+    background-color: #ccc;
+}
+
+table thead .table-title {
+    background-color: #000;
+    color: #fff;
+    font-size: 0.8em;
+    font-weight: bold;
+    width: 3em;
+}
+table thead .table-header {
+    font-weight: bold;
+    padding: 0 3px;
+}
+
+table tr {
+    border-bottom: 1px solid #000;
+}
+
+table tbody .row-item.single-row-item, table tbody .row-item.selected-row-item {
+    background-color: #4FFF63;
+}
+
+table tbody .row-item-time {
+    background-color: #ccc;
+    border-right: 1px solid #000;
+}
+
+table tbody .row-item {
+    padding: 0 3px;
+}
+
+table tbody .row-item .item-speaker {
+    font-size: 0.8em;
+}
+
+body.has-localstorage table .row-item {
+    cursor: pointer;
+}
+body.has-localstorage table .row-item.single-row-item {
+    cursor: inherit;
+}
