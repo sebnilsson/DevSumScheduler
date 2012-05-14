@@ -101,6 +101,7 @@ table thead, table tfoot {
     width: 3em;
 }
 .table-header {
+    border-right: 1px solid #000;
     font-weight: bold;
     padding: 0 3px;
     text-align: center;
