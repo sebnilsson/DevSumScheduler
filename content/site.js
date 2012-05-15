@@ -77,7 +77,7 @@ var showInstructions = function () {
         return;
     }
 
-    var instructionMessage = $('<div>Click on a session to highlight it.</div>').click(function () {
+    var instructionMessage = $('<div><p>Click on a session to highlight it.</p></div>').click(function () {
         localStorage.supressInstructions = true;
     });
 

@@ -162,6 +162,11 @@ footer {
 }
 
 html.js #messages div {
-    border: 1px dashed #000;
     cursor: pointer;
+    padding: 0px;
+}
+html.js #messages div p {
+    border: 1px dashed #000000;
+    padding: 5px;
+    margin: 0px;
 }
