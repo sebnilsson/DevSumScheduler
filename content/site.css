@@ -171,6 +171,7 @@ body.no-localstorage #bottom-toolbar #reset-choices {
     background-color: #CCCCCC;
     border: 1px dashed #000000;
     float: right;
+    margin: 0px 0px 1em 0px;
     padding: 3px 5px;
 }
 

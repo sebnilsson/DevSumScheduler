@@ -175,7 +175,9 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="libraries\modernizr.custom.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="content\site.css" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
