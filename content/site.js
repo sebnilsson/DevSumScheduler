@@ -5,6 +5,8 @@
     } else {
         $('body').addClass('has-localstorage');
         initScheduler();
+
+        showInstructions();
     }
 });
 
@@ -61,8 +63,23 @@ var storeSchedule = function (key, index) {
     localStorage[key] = index;
 };
 
-
 var removeSchedule = function (key, index) {
     'use strict';
     delete localStorage[key];
+};
+
+var showInstructions = function () {
+    $(document).on('click', '#messages div', function () {
+        $(this).remove();
+    });
+
+    if (localStorage.supressInstructions === 'true') {
+        return;
+    }
+
+    var instructionMessage = $('<div>Click on a session to highlight it.</div>').click(function () {
+        localStorage.supressInstructions = true;
+    });
+
+    $('#messages').append(instructionMessage);
 };
