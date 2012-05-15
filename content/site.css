@@ -182,6 +182,9 @@ footer {
     margin-top: 0.5em;
     padding: 5px 10px;
 }
+footer a, footer a:hover, footer a:active, footer a:visited {
+    color: #88f;
+}
 
 html.js #messages div {
     cursor: pointer;

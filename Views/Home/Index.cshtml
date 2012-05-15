@@ -32,13 +32,13 @@
                             var singleItemClass = (row.Value.Count() <= 1) ? "row-item single-row-item" : "row-item";
                             var colspan = (row.Value.Count() <= 1) ? "3" : null;
                             <td class="@singleItemClass" colspan="@colspan">
-                                <span class="item-title">@item.Title</span>
+                                <span class="item-title">@Html.Raw(item.Title)</span>
                                 <div class="clear"></div>
                                 <span class="item-speaker">
                                     @if(!string.IsNullOrWhiteSpace(item.SpeakerUrl)) {
-                                        <a href="@item.SpeakerUrl">@item.Speaker</a>
+                                        <a href="@item.SpeakerUrl">@Html.Raw(item.Speaker)</a>
                                     } else {
-                                        @item.Speaker
+                                        @Html.Raw(item.Speaker)
                                     }                                    
                                 </span>
                             </td>
