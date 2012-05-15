@@ -89,8 +89,13 @@ table {
     border-left: 1px solid #000;
     width: 100%;
 }
-table thead, table tfoot {
-    background-color: #ccc;
+table thead {
+    background-color: #000;
+    color: #fff;
+}
+table tfoot, table tfoot .table-title {
+    background-color: #444;
+    color: #fff;
 }
 
 .table-title {
