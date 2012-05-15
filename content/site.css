@@ -62,6 +62,10 @@ html.js #no-js-message {
     display: none;
 }
 
+html.no-js .js {
+    display: none;
+}
+
 nav ul {
     background-color: #000;
     list-style: none outside none;
@@ -157,6 +161,17 @@ body.has-localstorage table .row-item.single-row-item {
 
 body.has-localstorage table tr.has-selected-item .row-item:not(.selected-row-item) {
     color: #555;
+}
+
+body.no-localstorage #bottom-toolbar #reset-choices {
+    display: none;
+}
+
+#bottom-toolbar {
+    background-color: #CCCCCC;
+    border: 1px dashed #000000;
+    float: right;
+    padding: 3px 5px;
 }
 
 footer {

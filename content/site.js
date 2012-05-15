@@ -7,6 +7,15 @@
         initScheduler();
 
         showInstructions();
+
+        $('#reset-choices').click(function () {
+            localStorage.clear();
+            if (window.location.reload) {
+                window.location.reload(false);
+            } else {
+                window.location.href = window.location.pathname;
+            }
+        });
     }
 });
 
