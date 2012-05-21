@@ -26,7 +26,10 @@ var initScheduler = function () {
     'use strict';
     restoreSchedule();
 
-    $('.row-item:not(".single-row-item")').click(function () {
+    $('.row-item:not(".single-row-item")').click(function (event) {
+        if ($(event.target).is('a')) {
+            return;
+        }
         var $this = $(this);
         var $parent = $this.parent();
 
