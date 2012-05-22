@@ -9,6 +9,10 @@ a:visited {
     color: #0000EE;
 }
 
+h1 {
+    margin: 0.5em 0px 0px 0px;
+}
+
 @media screen and (max-width: 320px) {
     body{
         font-size: 0.5em;

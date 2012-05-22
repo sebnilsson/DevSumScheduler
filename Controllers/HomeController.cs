@@ -14,6 +14,9 @@ namespace DevSumScheduler.Controllers {
 
         public ActionResult Index() {
             var scheduleTables = GetScheduleTables();
+            if(scheduleTables == null) {
+                return View("NoData");
+            }
 
             return View(scheduleTables);
         }
@@ -23,7 +26,10 @@ namespace DevSumScheduler.Controllers {
 
             var scheduleTables = HttpContext.Cache[cacheKey] as IList<ScheduleTable>;
             if(scheduleTables == null) {
-                scheduleTables = ParseScheduleTables().ToList();
+                scheduleTables = (ParseScheduleTables() ?? Enumerable.Empty<ScheduleTable>()).ToList();
+                if(!scheduleTables.Any()) {
+                    return null;
+                }
 
                 HttpContext.Cache.Add(cacheKey, scheduleTables, null, DateTime.Now.AddHours(1),
                     Cache.NoSlidingExpiration, CacheItemPriority.High, null);
@@ -33,10 +39,22 @@ namespace DevSumScheduler.Controllers {
         }
 
         private IEnumerable<ScheduleTable> ParseScheduleTables() {
-            var client = new WebClient() {
-                Encoding = System.Text.Encoding.UTF8
-            };
-            string html = client.DownloadString(devSumUrl);
+            WebClient client = null;
+            string html = string.Empty;
+            try {
+                client = new WebClient() {
+                    Encoding = System.Text.Encoding.UTF8
+                };
+                html = client.DownloadString(devSumUrl);
+            }
+            catch(Exception) {
+                yield break;
+            }
+            finally {
+                if(client != null) {
+                    client.Dispose();
+                }
+            }
 
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
