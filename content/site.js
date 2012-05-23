@@ -24,7 +24,10 @@ var hasSelectedItemClass = 'has-selected-item';
 
 var initScheduler = function () {
     'use strict';
-    restoreSchedule();
+
+    if ($('#schedule-tables').length) {
+        restoreSchedule();
+    }
 
     $('.row-item:not(".single-row-item")').click(function (event) {
         if ($(event.target).is('a')) {
