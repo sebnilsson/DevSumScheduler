@@ -129,7 +129,7 @@ table tbody .row-item.single-row-item {
     background-color: #FFE77C;
 }
 
-table tbody .row-item.selected-row-item {
+#schedule-tables.ready table tbody .row-item.selected-row-item {
     background-color: #4FFF63;
 }
 
@@ -155,15 +155,15 @@ table tbody .row-item .item-speaker {
     text-align: right;
 }
 
-body.has-localstorage table .row-item {
+body table .row-item {
     cursor: pointer;
     text-align: center;
 }
-body.has-localstorage table .row-item.single-row-item {
+body table .row-item.single-row-item {
     cursor: inherit;
 }
 
-body.has-localstorage table tr.has-selected-item .row-item:not(.selected-row-item) {
+#schedule-tables.ready table tr.has-selected-item .row-item:not(.selected-row-item) {
     color: #555;
 }
 

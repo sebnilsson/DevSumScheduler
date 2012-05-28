@@ -169,12 +169,12 @@
     <Compile Include="ViewModels\ScheduleItem.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="libraries\html5.js" />
+    <Content Include="libraries\amplify.store.js" />
+    <Content Include="libraries\html5shiv.js" />
     <Content Include="content\reset.css" />
     <Content Include="content\site.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="libraries\modernizr.custom.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

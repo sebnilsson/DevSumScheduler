@@ -34,10 +34,10 @@
         <strong>Your browser doesn't support JavaScript</strong>,
         so this website's special features cannot be used.
     </div>
-    <div id="no-localstorage-message">
+    @*<div id="no-localstorage-message">
         <strong>Your browser doesn't support <a href="http://www.w3.org/TR/webstorage/">LocalStorage</a></strong>,
         so you cannot save your preferences.
-    </div>
+    </div>*@
     <div id="messages">
         @*<div><p>Test-message with content goes here</p></div>*@
     </div>
@@ -65,8 +65,8 @@
     <script>window.jQuery || document.write('<script src="@Url.Content("~/scripts/jquery-1.7.2.min.js")"><\/script>')</script>
 
     @(Html.BundleJavaScript()
-        .Add("~/libraries/modernizr.custom.js")
-        .Add("~/libraries/html5.js")
+        .Add("~/libraries/html5shiv.js")
+        .Add("~/libraries/amplify.store.js")
         .Add("~/content/site.js")
         .MvcRender("~/bundled-bottom.js?v=#"))
 
