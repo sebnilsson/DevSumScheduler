@@ -171,7 +171,7 @@
   <ItemGroup>
     <Content Include="libraries\amplify.store.js" />
     <Content Include="libraries\html5shiv.js" />
-    <Content Include="content\reset.css" />
+    <Content Include="content\normalize.css" />
     <Content Include="content\site.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
