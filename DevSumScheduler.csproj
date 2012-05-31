@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -175,6 +176,7 @@
     <Content Include="content\site.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="libraries\jquery-1.7.2.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -194,6 +196,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\NoData.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\offline.appcache" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

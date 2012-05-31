@@ -31,6 +31,12 @@ namespace DevSumScheduler {
                 defaults: new { controller = "Home", action = "About", id = UrlParameter.Optional }
             );
 
+            routes.MapRoute(
+                name: "AppCache",
+                url: "{fileName}.appcache",
+                defaults: new { controller = "Resource", action = "File", fileExtension = "appcache" }
+            );
+
             //routes.MapRoute(
             //    name: "Default",
             //    url: "{controller}/{action}/{id}",
