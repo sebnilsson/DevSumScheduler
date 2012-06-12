@@ -6,21 +6,21 @@
     
     string pageTitle = (hasPrefixText) ? string.Format("{0} - {1}", viewBagTitle, suffixText) : suffixText;
 
-    bool isOfflineMode = (!string.IsNullOrWhiteSpace(Request.QueryString["offline"]));
+    //bool isOfflineMode = (!string.IsNullOrWhiteSpace(Request.QueryString["offline"]));
 
     var cssBundle = Html.BundleCss()
         .Add("~/content/normalize.css")
         .Add("~/content/site.css");
         
-    var jsBundle = Html.BundleJavaScript()
-        .Add("~/libraries/html5shiv.js")
-        .Add("~/libraries/amplify.store.js")
-        .Add("~/content/site.js");
+    //var jsBundle = Html.BundleJavaScript()
+    //    .Add("~/libraries/html5shiv.js")
+    //    .Add("~/libraries/amplify.store.js")
+    //    .Add("~/content/site.js");
 
-    if(isOfflineMode) {
-        cssBundle = cssBundle.ForceDebug();
-        jsBundle = jsBundle.ForceDebug();
-    }    
+    //if(isOfflineMode) {
+    //    cssBundle = cssBundle.ForceDebug();
+    //    jsBundle = jsBundle.ForceDebug();
+    //}    
 
     var cssRender = cssBundle.MvcRender("~/bundled-sitestyles.css");
     var jsRender = jsBundle.MvcRender("~/bundled-bottom.js");
