@@ -11,11 +11,12 @@
     var cssBundle = Html.BundleCss()
         .Add("~/content/normalize.css")
         .Add("~/content/site.css");
+
+    var jsBundleHead = Html.BundleJavaScript().Add("~/libraries/html5shiv.js");
         
-    //var jsBundle = Html.BundleJavaScript()
-    //    .Add("~/libraries/html5shiv.js")
-    //    .Add("~/libraries/amplify.store.js")
-    //    .Add("~/content/site.js");
+    var jsBundleBottom = Html.BundleJavaScript()
+        .Add("~/libraries/amplify.store.js")
+        .Add("~/content/site.js");
 
     //if(isOfflineMode) {
     //    cssBundle = cssBundle.ForceDebug();
@@ -23,7 +24,8 @@
     //}    
 
     var cssRender = cssBundle.MvcRender("~/bundled-sitestyles.css");
-    var jsRender = jsBundle.MvcRender("~/bundled-bottom.js");
+    var jsRenderHead = jsBundleHead.MvcRender("~/bundled-head.js");
+    var jsRenderBottom = jsBundleBottom.MvcRender("~/bundled-bottom.js");
 }
 <!DOCTYPE html>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
@@ -41,6 +43,8 @@
     <script>document.documentElement.className = 'js';</script>
 
     @(cssRender)
+    
+    @(jsRenderHead)
 
 </head>
 <body>
@@ -75,10 +79,10 @@
         © Copyright @DateTime.Today.Year <a href="http://www.sebnilsson.com">Seb Nilsson</a>, who you can also <a href="http://www.twitter.com/sebnilsson">follow on Twitter</a>
     </footer>
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="@Url.Content("~/libraries/jquery-1.7.2.min.js")"><\/script>')</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="@Url.Content("~/libraries/jquery-1.9.0.min.js")"><\/script>')</script>
 
-    @(jsRender)
+    @(jsRenderBottom)
 
     <script type="text/javascript">
         var _gaq = _gaq || [];
