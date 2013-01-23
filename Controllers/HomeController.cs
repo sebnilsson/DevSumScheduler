@@ -83,8 +83,7 @@ namespace DevSumScheduler.Controllers
 
                 var itemsRows = table.SelectNodes("tbody/tr");
 
-                var items = ParseItems(itemsRows)
-                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.GroupBy(x => x.Title).Select(x => x.First()));
+                var items = ParseItems(itemsRows).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
                 yield return
                     new ScheduleTable
