@@ -163,6 +163,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\offline.appcache" />
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
