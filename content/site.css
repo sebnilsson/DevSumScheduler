@@ -43,7 +43,7 @@ h1 {
 .clear { clear: both; }
 
 #messages div, #no-js-message, #no-localstorage-message {
-    background-color: #F7F26C;
+    background-color: #89CFF0;
     border-bottom: 2px solid #000000;
     margin: 0;
     padding: 5px;
@@ -89,7 +89,7 @@ nav ul li a, nav ul li a:hover, nav ul li a:active, nav ul li a:visited {
     padding: 0.5em 0;
 }
 
-table {
+#schedule-tables table {
     margin: 1em 0px;
     border-top: 2px solid #000;
     border-right: 1px solid #000;
@@ -97,16 +97,16 @@ table {
     border-left: 1px solid #000;
     width: 100%;
 }
-table thead {
+#schedule-tables table thead {
     background-color: #000;
     color: #fff;
 }
-table tfoot, table tfoot .table-title {
+#schedule-tables table tfoot, table tfoot .table-title {
     background-color: #444;
     color: #fff;
 }
 
-.table-title {
+#schedule-tables .table-title {
     background-color: #000;
     border-right: 1px solid black;
     color: #fff;
@@ -125,12 +125,12 @@ table tbody tr, table thead tr {
     border-bottom: 1px solid #000;
 }
 
-table tbody .row-item.single-row-item {
-    background-color: #FFE77C;
+table tbody .row-item.row-item-single {
+    background-color: #FCE883;
 }
 
 #schedule-tables.ready table tbody .row-item.selected-row-item {
-    background-color: #4FFF63;
+    background-color: #71BC78;
 }
 
 table tbody .row-item-time {
@@ -139,27 +139,28 @@ table tbody .row-item-time {
     font-size: 0.9em;
 }
 
-table tbody .row-item {
+.row-item {
+    cursor: pointer;
     padding: 0 3px;
+    text-align: center;
     vertical-align: middle;
 }
 
-table tbody .row-item:nth-child(3), table td.table-header:nth-child(3) {
+.row-item:not(:first-child):not(:last-child) {
     border-left: 1px solid #000;
     border-right: 1px solid #000;
 }
 
-table tbody .row-item .item-speaker {
+.row-item .item-speaker {
     font-size: 0.8em;
     display: block;
+}
+
+.row-item-multiple .item-speaker {
     text-align: right;
 }
 
-body table .row-item {
-    cursor: pointer;
-    text-align: center;
-}
-body table .row-item.single-row-item {
+.row-item-single {
     cursor: inherit;
 }
 
@@ -172,7 +173,7 @@ body.no-localstorage #bottom-toolbar #reset-choices {
 }
 
 #bottom-toolbar {
-    background-color: #CCCCCC;
+    background-color: #ccc;
     border: 1px dashed #000000;
     float: right;
     margin: 0px 0px 1em 0px;

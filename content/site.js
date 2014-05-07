@@ -1,11 +1,11 @@
-﻿(function (window, document, undefined) {
+﻿(function(window, document, undefined) {
     'use strict';
-    $(function () {
+    $(function() {
         showInstructions();
 
         initScheduler();
 
-        $('#reset-choices').click(function (event) {
+        $('#reset-choices').click(function(event) {
             event.preventDefault();
 
             clearStore();
@@ -21,12 +21,12 @@
     var selectedRowItemClass = 'selected-row-item';
     var hasSelectedItemClass = 'has-selected-item';
 
-    var initScheduler = function () {
+    var initScheduler = function() {
         if ($('#schedule-tables').length) {
             restoreSchedule();
         }
 
-        $('.row-item:not(".single-row-item")').click(function (event) {
+        $('.row-item:not(".row-item-single")').click(function(event) {
             if ($(event.target).is('a')) {
                 return;
             }
@@ -53,7 +53,7 @@
         $('#schedule-tables').addClass('ready');
     };
 
-    var restoreSchedule = function () {
+    var restoreSchedule = function() {
         var store = amplify.store();
         for (var key in store) {
             var value = parseInt(amplify.store(key));
@@ -72,7 +72,7 @@
         }
     };
 
-    var clearStore = function () {
+    var clearStore = function() {
         $('#schedule-tables').removeClass('ready');
 
         var store = amplify.store();
@@ -81,16 +81,16 @@
         }
     };
 
-    var storeSchedule = function (key, index) {
+    var storeSchedule = function(key, index) {
         amplify.store(key, index);
     };
 
-    var removeSchedule = function (key) {
+    var removeSchedule = function(key) {
         amplify.store(key, null);
     };
 
-    var showInstructions = function () {
-        $(document).on('click', '#messages div', function () {
+    var showInstructions = function() {
+        $(document).on('click', '#messages div', function() {
             $(this).remove();
         });
 
@@ -98,7 +98,7 @@
             return;
         }
 
-        var instructionMessage = $('<div><p>Click on a session to highlight it.</p></div>').click(function () {
+        var instructionMessage = $('<div><p>Click on a session to highlight it.</p></div>').click(function() {
             amplify.store('supressInstructions', true);
         });
 

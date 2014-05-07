@@ -6,13 +6,14 @@ using System.Web.Caching;
 using System.Web.Mvc;
 
 using DevSumScheduler.ViewModels;
-using HtmlAgilityPack;
 
 namespace DevSumScheduler.Controllers
 {
     public class HomeController : Controller
     {
-        private const string devSumUrl = "http://devsum.se/schema/";
+        private const string DevSumScheduleUrl = "http://devsum.se/schema/";
+
+        private const string ScheduleTablesCacheKey = "DevSumScheduler.Controllers.HomeController.GetScheduleTables";
 
         public ActionResult Index()
         {
@@ -27,20 +28,19 @@ namespace DevSumScheduler.Controllers
 
         private IList<ScheduleTable> GetScheduleTables()
         {
-            string cacheKey = "DevSumScheduler.Controllers.HomeController.GetScheduleTables";
+            var cachedScheduleTables = HttpContext.Cache[ScheduleTablesCacheKey] as IList<ScheduleTable>;
 
-            var scheduleTables = HttpContext.Cache[cacheKey] as IList<ScheduleTable>;
-            if (scheduleTables == null)
+            if (cachedScheduleTables == null)
             {
-                scheduleTables = (ParseScheduleTables() ?? Enumerable.Empty<ScheduleTable>()).ToList();
-                if (!scheduleTables.Any())
+                cachedScheduleTables = (ParseScheduleTables() ?? Enumerable.Empty<ScheduleTable>()).ToList();
+                if (!cachedScheduleTables.Any())
                 {
                     return null;
                 }
 
                 HttpContext.Cache.Add(
-                    cacheKey,
-                    scheduleTables,
+                    ScheduleTablesCacheKey,
+                    cachedScheduleTables,
                     null,
                     DateTime.Now.AddHours(1),
                     Cache.NoSlidingExpiration,
@@ -48,82 +48,22 @@ namespace DevSumScheduler.Controllers
                     null);
             }
 
-            return scheduleTables;
+            return cachedScheduleTables;
         }
 
-        private IEnumerable<ScheduleTable> ParseScheduleTables()
+        private static IEnumerable<ScheduleTable> ParseScheduleTables()
         {
-            WebClient client = null;
-            string html = string.Empty;
             try
             {
-                client = new WebClient() { Encoding = System.Text.Encoding.UTF8 };
-                html = client.DownloadString(devSumUrl);
+                using (var client = new WebClient { Encoding = System.Text.Encoding.UTF8 })
+                {
+                    string html = client.DownloadString(DevSumScheduleUrl);
+                    return ScheduleTable.ParseHtml(html);
+                }
             }
             catch (Exception)
             {
-                yield break;
-            }
-            finally
-            {
-                if (client != null)
-                {
-                    client.Dispose();
-                }
-            }
-
-            var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(html);
-
-            var schemaTable = htmlDocument.DocumentNode.SelectNodes("//table[@class='schema_table']");
-
-            foreach (var table in schemaTable)
-            {
-                var headerItems = table.SelectNodes("thead/tr/td");
-
-                var itemsRows = table.SelectNodes("tbody/tr");
-
-                var items = ParseItems(itemsRows)
-                    .ToDictionary(
-                        kvp => kvp.Key, kvp => kvp.Value.GroupBy(x => new { x.Title, x.Speaker }).Select(x => x.First()));
-
-                yield return
-                    new ScheduleTable
-                        {
-                            Headers = headerItems.Skip(1).Select(item => item.InnerText),
-                            Rows = items,
-                            Title = headerItems.First().InnerText.Replace("dag", "d."),
-                        };
-            }
-        }
-
-        private static IEnumerable<KeyValuePair<string, IEnumerable<ScheduleItem>>> ParseItems(
-            IEnumerable<HtmlNode> itemsRows)
-        {
-            foreach (var row in itemsRows)
-            {
-                var time = row.SelectSingleNode("th").InnerText;
-                var tdTables = row.SelectNodes("td/table");
-
-                var result = from tdTable in tdTables
-                             //.SelectSingleNode("table").ChildNodes
-                             let title = tdTable.SelectSingleNode("tr[@class='top']/td/a").InnerText
-                             let speakerNode = tdTable.SelectSingleNode("tr[@class='bottom']/td/a")
-                             let speaker = speakerNode.InnerText
-                             let speakerUrl = speakerNode.Attributes["href"].Value
-                             select
-                                 new ScheduleItem
-                                     {
-                                         Speaker = speaker,
-                                         SpeakerUrl =
-                                             (string.IsNullOrWhiteSpace(speakerUrl)
-                                              || speakerUrl.StartsWith("?"))
-                                                 ? null
-                                                 : speakerUrl,
-                                         Title = title,
-                                     };
-
-                yield return new KeyValuePair<string, IEnumerable<ScheduleItem>>(time, result);
+                return Enumerable.Empty<ScheduleTable>();
             }
         }
 
