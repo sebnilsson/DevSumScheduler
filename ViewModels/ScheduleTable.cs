@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
@@ -10,7 +11,7 @@ namespace DevSumScheduler.ViewModels
     {
         public ScheduleTable(string title, ICollection<ScheduleRow> rows)
         {
-            this.Title = title;
+            this.Title = GetShortTitle(title);
             this.Rows = rows;
 
             var multipleItemRows = this.Rows.Where(x => x.HasMultipleItems).ToList();
@@ -23,7 +24,7 @@ namespace DevSumScheduler.ViewModels
         public ICollection<string> Headers { get; private set; }
 
         public ICollection<ScheduleRow> Rows { get; private set; }
-        
+
         public string GetRowId(ScheduleRow row)
         {
             string key = string.Concat(this.Title, "-", row.TimeText).ToLowerInvariant();
@@ -40,11 +41,12 @@ namespace DevSumScheduler.ViewModels
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
 
-            var scheduleEls = htmlDocument.DocumentNode.SelectNodes("//dl[@class='gk-schedule']/dt | //dl[@class='gk-schedule']/dd");
+            var scheduleEls =
+                htmlDocument.DocumentNode.SelectNodes("//dl[@class='gk-schedule']/dt | //dl[@class='gk-schedule']/dd");
 
             var scheduleDays = GetDays(scheduleEls).ToList();
 
-            foreach(var day in scheduleDays)
+            foreach (var day in scheduleDays)
             {
                 yield return FromHtmlNodes(day.Key, day.Value);
             }
@@ -65,6 +67,14 @@ namespace DevSumScheduler.ViewModels
 
                 yield return new KeyValuePair<HtmlNode, ICollection<HtmlNode>>(headerEl, items);
             }
+        }
+
+        private static string GetShortTitle(string title)
+        {
+            title = title ?? string.Empty;
+
+            var separatorIndex = title.LastIndexOf(",", StringComparison.OrdinalIgnoreCase);
+            return (separatorIndex > 0) ? title.Substring(0, separatorIndex) : title;
         }
 
         private static ScheduleTable FromHtmlNodes(HtmlNode headerNode, ICollection<HtmlNode> rowNodes)

@@ -8,6 +8,11 @@
         $('#reset-choices').click(function(event) {
             event.preventDefault();
 
+            var result = confirm('Are you sure?');
+            if (!result) {
+                return;
+            }
+
             clearStore();
 
             if (window.location.reload) {

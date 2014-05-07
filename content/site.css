@@ -114,18 +114,18 @@ nav ul li a, nav ul li a:hover, nav ul li a:active, nav ul li a:visited {
     font-weight: bold;
     width: 3em;
 }
-.table-header {
+#schedule-tables .table-header {
     border-right: 1px solid #000;
     font-weight: bold;
     padding: 0 3px;
     text-align: center;
 }
 
-table tbody tr, table thead tr {
+#schedule-tables table tbody tr, table thead tr {
     border-bottom: 1px solid #000;
 }
 
-table tbody .row-item.row-item-single {
+#schedule-tables table tbody .row-item.row-item-single {
     background-color: #FCE883;
 }
 
@@ -133,10 +133,14 @@ table tbody .row-item.row-item-single {
     background-color: #71BC78;
 }
 
-table tbody .row-item-time {
+#schedule-tables table tbody .row-item-time {
     background-color: #ccc;
     border-right: 1px solid #000;
     font-size: 0.9em;
+}
+
+#schedule-tables tfoot {
+    font-size: 0.8em;
 }
 
 .row-item {

@@ -2,9 +2,9 @@
 
 @model IEnumerable<ScheduleTable>
 
-@helper RenderHeaderRow(string tableTitle, IEnumerable<string> headers) {
+@helper RenderHeaderRow(IEnumerable<string> headers) {
     <tr>
-        <th class="table-title">@tableTitle</th>
+        <th class="table-header">&nbsp;</th>
 
         @foreach (var header in headers)
         {
@@ -27,10 +27,18 @@
     }
 }
 
-@helper RenderItemContent(ScheduleItem item)
+@helper RenderItemContent(ScheduleItem item, string location = null)
 {
     <span class="item-title">@Html.Raw(item.Title)</span>
     <div class="clear"></div>
+            
+    if (!string.IsNullOrWhiteSpace(location))
+    {
+        <span class="item-location">
+            <em>(@location)</em>
+        </span>
+        <div class="clear"></div>
+    }
     
     if (!string.IsNullOrWhiteSpace(item.Speaker) || !string.IsNullOrWhiteSpace(item.SpeakerUrl))
     {
@@ -48,12 +56,15 @@
     }
 }
 
+<h1>DevSum-scheduler</h1>
+
 <div id="schedule-tables">
     @foreach (var table in Model)
     {
+        <h2>@table.Title</h2>
         <table>
             <thead>
-                @RenderHeaderRow(table.Title, table.Headers)
+                @RenderHeaderRow(table.Headers)
             </thead>
             <tbody>
                 @foreach (var row in table.Rows)
@@ -71,11 +82,7 @@
                             if (item != null)
                             {
                                 <td class="row-item row-item-single" colspan="@table.Headers.Count">
-                                    @RenderItemContent(item)
-                                    
-                                    <span class="item-location">
-                                        <em>(@item.Location)</em>
-                                    </span>
+                                    @RenderItemContent(item, item.Location)
                                 </td>
                             }
                         }
@@ -85,7 +92,7 @@
             @if (table.Rows.Count > 1)
             {
                 <tfoot>
-                    @RenderHeaderRow(table.Title, table.Headers)
+                    @RenderHeaderRow(table.Headers)
                 </tfoot>
             }
         </table>
