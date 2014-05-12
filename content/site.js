@@ -14,6 +14,26 @@
         hasSelectedItemClass = 'has-selected-item';
 
     function initFancybox() {
+        //$('.fancybox').click(function(e) {
+        //    e.preventDefault();
+
+        //    var $this = $(this),
+        //        href = $this.data('href') || $this.prop('href');
+
+        //    $.ajax({
+        //        url: href,
+        //        success: function(result) {
+        //            $.fancybox.open({
+        //                type: 'iframe',
+        //                content: result,
+        //                tpl: {
+        //                    wrap: ''
+        //                }
+        //            });
+        //        }
+        //    });
+        //});
+
         $('.fancybox').fancybox({
             type: 'iframe'
         });

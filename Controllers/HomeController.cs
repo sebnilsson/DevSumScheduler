@@ -17,7 +17,7 @@ namespace DevSumScheduler.Controllers
 
         public ActionResult Index()
         {
-            var scheduleTables = GetScheduleTables();
+            var scheduleTables = this.GetScheduleTables();
             if (scheduleTables == null)
             {
                 return View("NoData");
@@ -26,9 +26,15 @@ namespace DevSumScheduler.Controllers
             return View(scheduleTables);
         }
 
+        public ActionResult About()
+        {
+            ViewBag.Title = "About";
+            return View();
+        }
+
         private IList<ScheduleTable> GetScheduleTables()
         {
-            var cachedScheduleTables = HttpContext.Cache[ScheduleTablesCacheKey] as IList<ScheduleTable>;
+            var cachedScheduleTables = this.HttpContext.Cache[ScheduleTablesCacheKey] as IList<ScheduleTable>;
 
             if (cachedScheduleTables == null)
             {
@@ -65,12 +71,6 @@ namespace DevSumScheduler.Controllers
             {
                 return Enumerable.Empty<ScheduleTable>();
             }
-        }
-
-        public ActionResult About()
-        {
-            ViewBag.Title = "About";
-            return View();
         }
     }
 }
