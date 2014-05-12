@@ -27,7 +27,10 @@ namespace DevSumScheduler.ViewModels
 
         public string GetRowId(ScheduleRow row)
         {
-            string key = string.Concat(this.Title, "-", row.TimeText).ToLowerInvariant();
+            var titleFirstPartIndex = this.Title.IndexOf(',');
+            string titleFirstPart = this.Title.Substring(0, titleFirstPartIndex);
+
+            string key = string.Concat(titleFirstPart, "-", row.TimeText).ToLowerInvariant();
             return HttpUtility.HtmlAttributeEncode(key);
         }
 

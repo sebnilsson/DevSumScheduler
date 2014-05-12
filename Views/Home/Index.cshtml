@@ -45,7 +45,7 @@
         <span class="item-speaker">
             @if (!string.IsNullOrWhiteSpace(item.SpeakerUrl))
             {
-                <a href="@item.SpeakerUrl">@Html.Raw(item.Speaker)</a>
+                <a href="@item.SpeakerUrl" class="fancybox">@Html.Raw(item.Speaker)</a>
             }
             else if (!string.IsNullOrWhiteSpace(item.Speaker))
             {

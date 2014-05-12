@@ -5,8 +5,23 @@
 
         initScheduler();
 
-        $('#reset-choices').click(function(event) {
-            event.preventDefault();
+        initResetChoices();
+
+        initFancybox();
+    });
+
+    var selectedRowItemClass = 'selected-row-item',
+        hasSelectedItemClass = 'has-selected-item';
+
+    function initFancybox() {
+        $('.fancybox').fancybox({
+            type: 'iframe'
+        });
+    }
+
+    function initResetChoices() {
+        $('#reset-choices').click(function(e) {
+            e.preventDefault();
 
             var result = confirm('Are you sure?');
             if (!result) {
@@ -21,12 +36,9 @@
                 window.location.href = window.location.pathname;
             }
         });
-    });
+    }
 
-    var selectedRowItemClass = 'selected-row-item';
-    var hasSelectedItemClass = 'has-selected-item';
-
-    var initScheduler = function() {
+    function initScheduler() {
         if ($('#schedule-tables').length) {
             restoreSchedule();
         }
@@ -56,45 +68,50 @@
         });
 
         $('#schedule-tables').addClass('ready');
-    };
+    }
 
-    var restoreSchedule = function() {
-        var store = amplify.store();
-        for (var key in store) {
-            var value = parseInt(amplify.store(key));
-            if (!isNaN(value)) {
-                var siblingItems = $('tr[data-row-id="' + key + '"] td');
-                if (siblingItems.length > 1) {
-                    var $item = $(siblingItems[value]);
-                    if ($item) {
-                        $item.addClass(selectedRowItemClass);
-                        $item.parent().addClass(hasSelectedItemClass);
-                        continue;
-                    }
-                }
-                removeSchedule(key);
-            }
-        }
-    };
-
-    var clearStore = function() {
+    function clearStore() {
         $('#schedule-tables').removeClass('ready');
 
         var store = amplify.store();
         for (var key in store) {
-            amplify.store(key, null);
+            if (store.hasOwnProperty(key)) {
+                amplify.store(key, null);
+            }
         }
-    };
+    }
 
-    var storeSchedule = function(key, index) {
-        amplify.store(key, index);
-    };
-
-    var removeSchedule = function(key) {
+    function removeSchedule(key) {
         amplify.store(key, null);
-    };
+    }
 
-    var showInstructions = function() {
+    function restoreSchedule() {
+        var store = amplify.store();
+
+        for (var key in store) {
+            if (store.hasOwnProperty(key)) {
+                var value = parseInt(amplify.store(key));
+                if (!isNaN(value)) {
+                    var siblingItems = $('tr[data-row-id="' + key + '"] td');
+                    if (siblingItems.length > 1) {
+                        var $item = $(siblingItems[value]);
+                        if ($item) {
+                            $item.addClass(selectedRowItemClass);
+                            $item.parent().addClass(hasSelectedItemClass);
+                            continue;
+                        }
+                    }
+                    removeSchedule(key);
+                }
+            }
+        }
+    }
+
+    function storeSchedule(key, index) {
+        amplify.store(key, index);
+    }
+
+    function showInstructions() {
         $(document).on('click', '#messages div', function() {
             $(this).remove();
         });
@@ -108,5 +125,5 @@
         });
 
         $('#messages').append(instructionMessage);
-    };
+    }
 })(window, document);

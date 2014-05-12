@@ -13,33 +13,6 @@ h1 {
     margin: 0.5em 0px 0px 0px;
 }
 
-@media screen and (max-width: 320px) {
-    body{
-        font-size: 0.5em;
-    }
-}
-
-@media screen and (max-width: 640px) {
-    body{
-        font-size: 0.6em;
-    }
-    header {
-        text-align: center;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    body{
-        font-size: 0.7em;
-    }
-}
-
-@media screen and (max-width: 1024px) {
-    body{
-        font-size: 0.8em;
-    }
-}
-
 .clear { clear: both; }
 
 #messages div, #no-js-message, #no-localstorage-message {
@@ -203,4 +176,31 @@ html.js #messages div p {
     border: 1px dashed #000000;
     padding: 5px;
     margin: 0px;
+}
+
+@media screen and (max-width: 1024px) {
+    body{
+        font-size: 0.85em;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body{
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    body{
+        font-size: 0.7em;
+    }
+    header {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    body{
+        font-size: 0.6em;
+    }
 }
