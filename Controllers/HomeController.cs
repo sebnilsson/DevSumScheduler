@@ -9,6 +9,7 @@ using DevSumScheduler.ViewModels;
 
 namespace DevSumScheduler.Controllers
 {
+    [Route("{action=index}", Name = "Home")]
     public class HomeController : Controller
     {
         private const string DevSumScheduleUrl = "http://devsum.se/schema/";
