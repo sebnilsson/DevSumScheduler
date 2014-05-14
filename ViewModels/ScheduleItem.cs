@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 
 using HtmlAgilityPack;
 
@@ -37,7 +38,13 @@ namespace DevSumScheduler.ViewModels
             string speakerUrl = (titleEl != null) ? titleEl.GetAttributeValue("href", string.Empty).Trim() : null;
             speakerUrl = (speakerUrl != "#") ? speakerUrl : null;
 
-            return new ScheduleItem { Location = location, Speaker = speaker, SpeakerUrl = speakerUrl, Title = title };
+            return new ScheduleItem
+                       {
+                           Location = WebUtility.HtmlDecode(location),
+                           Speaker = WebUtility.HtmlDecode(speaker),
+                           SpeakerUrl = speakerUrl,
+                           Title = WebUtility.HtmlDecode(title)
+                       };
         }
     }
 }

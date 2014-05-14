@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Caching;
 using System.Web.Mvc;
 
@@ -39,7 +41,9 @@ namespace DevSumScheduler.Controllers
 
             if (cachedScheduleTables == null)
             {
-                cachedScheduleTables = (ParseScheduleTables() ?? Enumerable.Empty<ScheduleTable>()).ToList();
+                var parseScheduleTablesTask = ParseScheduleTables();
+
+                cachedScheduleTables = (parseScheduleTablesTask ?? Enumerable.Empty<ScheduleTable>()).ToList();
                 if (!cachedScheduleTables.Any())
                 {
                     return null;
@@ -62,9 +66,18 @@ namespace DevSumScheduler.Controllers
         {
             try
             {
-                using (var client = new WebClient { Encoding = System.Text.Encoding.UTF8 })
+                using (var client = new HttpClient())
                 {
-                    string html = client.DownloadString(DevSumScheduleUrl);
+                    var responseTask = client.GetAsync(DevSumScheduleUrl);
+                    responseTask.Wait();
+
+                    var response = responseTask.Result;
+
+                    var contentTask = response.Content.ReadAsStringAsync();
+                    contentTask.Wait();
+
+                    string html = contentTask.Result;
+
                     return ScheduleTable.ParseHtml(html);
                 }
             }
