@@ -163,6 +163,7 @@
     <Compile Include="ViewModels\ScheduleItem.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="content\offerta_logo.png" />
     <Content Include="content\site.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />

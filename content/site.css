@@ -59,7 +59,7 @@ nav ul li a, nav ul li a:hover, nav ul li a:active, nav ul li a:visited {
 }
 
 #main-wrapper {
-    padding: 0.5em 0;
+    padding-bottom: 0.5em;
 }
 
 #schedule-tables table {
@@ -150,7 +150,7 @@ body.no-localstorage #bottom-toolbar #reset-choices {
 }
 
 #bottom-toolbar {
-    background-color: #ccc;
+    background-color: #aaa;
     border: 1px dashed #000000;
     float: right;
     margin: 0px 0px 1em 0px;
@@ -176,6 +176,22 @@ html.js #messages div p {
     border: 1px dashed #000000;
     padding: 5px;
     margin: 0px;
+}
+
+#ad {
+    background-color: #ddd;
+    border-bottom: 1px #555 dotted;
+    border-top: 1px #555 dotted;
+    margin-bottom: 0.5em;
+    padding: 1em 0.5em;
+}
+#ad .img-wrap {
+    display: table-cell;
+    padding-right: 1em;
+}
+#ad .text-wrap {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 @media screen and (max-width: 1024px) {
