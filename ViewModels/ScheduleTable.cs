@@ -1,22 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
-using HtmlAgilityPack;
+using CsQuery;
 
 namespace DevSumScheduler.ViewModels
 {
     public class ScheduleTable
     {
-        public ScheduleTable(string title, ICollection<ScheduleRow> rows)
+        public ScheduleTable(string title, IEnumerable<string> headers)
         {
+            if (title == null)
+            {
+                throw new ArgumentNullException("title");
+            }
+            if (headers == null)
+            {
+                throw new ArgumentNullException("headers");
+            }
+
             this.Title = GetShortTitle(title);
-            this.Rows = rows;
 
-            var multipleItemRows = this.Rows.Where(x => x.HasMultipleItems).ToList();
-
-            this.Headers = multipleItemRows.SelectMany(x => x.Items).Select(x => x.Location).Distinct().ToList();
+            this.Headers = headers.ToList();
+            this.Rows = new List<ScheduleRow>();
         }
 
         public string Title { get; private set; }
@@ -25,51 +31,31 @@ namespace DevSumScheduler.ViewModels
 
         public ICollection<ScheduleRow> Rows { get; private set; }
 
-        public string GetRowId(ScheduleRow row)
+        public static IEnumerable<ScheduleTable> ParseHtml(string pageHtml)
         {
-            var titleFirstPartIndex = this.Title.IndexOf(',');
-            string titleFirstPart = this.Title.Substring(0, titleFirstPartIndex);
-
-            string key = string.Concat(titleFirstPart, "-", row.TimeText).ToLowerInvariant();
-            return HttpUtility.HtmlAttributeEncode(key);
-        }
-
-        public static IEnumerable<ScheduleTable> ParseHtml(string html)
-        {
-            if (string.IsNullOrWhiteSpace(html))
+            if (string.IsNullOrWhiteSpace(pageHtml))
             {
                 yield break;
             }
 
-            var htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(html);
+            var pageQuery = CQ.Create(pageHtml);
 
-            var scheduleEls =
-                htmlDocument.DocumentNode.SelectNodes("//dl[@class='gk-schedule']/dt | //dl[@class='gk-schedule']/dd");
+            var scheduleDays = GetScheduleTableDays(pageQuery).ToList();
 
-            var scheduleDays = GetDays(scheduleEls).ToList();
-
-            foreach (var day in scheduleDays)
+            foreach (var scheduleDay in scheduleDays)
             {
-                yield return FromHtmlNodes(day.Key, day.Value);
+                var scheduleTable = FromScheduleDay(scheduleDay);
+                yield return scheduleTable;
             }
         }
 
-        private static IEnumerable<KeyValuePair<HtmlNode, ICollection<HtmlNode>>> GetDays(IList<HtmlNode> scheduleEls)
+        private static IEnumerable<ScheduleTableDay> GetScheduleTableDays(CQ pageQuery)
         {
-            var headerEls = scheduleEls.Where(x => x.Name == "dt").ToList();
+            var titleElement = pageQuery.Find("header h1");
 
-            foreach (var headerEl in headerEls)
-            {
-                int startIndex = scheduleEls.IndexOf(headerEl);
+            var tableElement = pageQuery.Find("#all-events table.tt_timetable");
 
-                var nextHeaderEl = scheduleEls.Skip(startIndex + 1).FirstOrDefault(x => x.Name == "dt");
-                int endIndex = (nextHeaderEl != null) ? scheduleEls.IndexOf(nextHeaderEl) : scheduleEls.Count;
-
-                var items = scheduleEls.Skip(startIndex + 1).Take(endIndex - startIndex - 1).ToList();
-
-                yield return new KeyValuePair<HtmlNode, ICollection<HtmlNode>>(headerEl, items);
-            }
+            yield return new ScheduleTableDay { TitleElement = titleElement, TableElement = tableElement };
         }
 
         private static string GetShortTitle(string title)
@@ -77,16 +63,41 @@ namespace DevSumScheduler.ViewModels
             title = title ?? string.Empty;
 
             var separatorIndex = title.LastIndexOf(",", StringComparison.OrdinalIgnoreCase);
-            return (separatorIndex > 0) ? title.Substring(0, separatorIndex) : title;
+
+            string shortTitle = (separatorIndex > 0) ? title.Substring(0, separatorIndex) : title;
+            return shortTitle;
         }
 
-        private static ScheduleTable FromHtmlNodes(HtmlNode headerNode, ICollection<HtmlNode> rowNodes)
+        private static ScheduleTable FromScheduleDay(ScheduleTableDay scheduleTableDay)
         {
-            string title = headerNode.InnerText;
+            string title = (scheduleTableDay.TitleElement.Text() ?? string.Empty).Trim();
 
-            var items = ScheduleRow.FromHtmlNodes(rowNodes).ToList();
+            var headers = GetHeaders(scheduleTableDay.TableElement).ToList();
 
-            return new ScheduleTable(title, items);
+            var scheduleTable = new ScheduleTable(title, headers);
+
+            var rows = ScheduleRow.FromTable(scheduleTable, scheduleTableDay.TableElement);
+            foreach (var row in rows)
+            {
+                scheduleTable.Rows.Add(row);
+            }
+
+            return scheduleTable;
+        }
+
+        private static IEnumerable<string> GetHeaders(CQ tableElement)
+        {
+            var headers = tableElement.Find("thead tr th").Skip(1).ToList();
+
+            var headerTexts = headers.Select(x => (x.InnerText ?? string.Empty).Trim());
+            return headerTexts;
+        }
+
+        private class ScheduleTableDay
+        {
+            public CQ TitleElement { get; set; }
+
+            public CQ TableElement { get; set; }
         }
     }
 }

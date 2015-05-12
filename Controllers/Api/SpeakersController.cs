@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 
-using HtmlAgilityPack;
+using CsQuery;
 
-namespace DevSumScheduler.Controllers
+namespace DevSumScheduler.Controllers.Api
 {
     [Route("api/speakers/{action=index}", Name = "ApiSpeakers")]
     public class SpeakersController : ApiController
@@ -23,18 +23,26 @@ namespace DevSumScheduler.Controllers
                 return this.BadRequest();
             }
 
+            devSumSpeakerUrl = devSumSpeakerUrl.ToLowerInvariant();
+
+            string speakerContent = await GetCachedSpeakerContent(devSumSpeakerUrl);
+            return this.Ok(speakerContent);
+        }
+
+        private static async Task<string> GetCachedSpeakerContent(string devSumSpeakerUrl)
+        {
             var cachedSpeakerContent = MemoryCache.Default[devSumSpeakerUrl] as string;
 
             if (cachedSpeakerContent == null)
             {
-                string speakerContent = await GetSpeakerContent(devSumSpeakerUrl);
+                var speakerContent = await GetSpeakerContent(devSumSpeakerUrl);
 
                 MemoryCache.Default.Add(devSumSpeakerUrl, speakerContent, DateTime.Now.AddHours(1));
 
                 cachedSpeakerContent = speakerContent;
             }
 
-            return this.Ok(cachedSpeakerContent);
+            return cachedSpeakerContent;
         }
 
         private static async Task<string> GetSpeakerContent(string devSumSpeakerUrl)
@@ -51,38 +59,22 @@ namespace DevSumScheduler.Controllers
                 return html;
             }
 
-            var document = new HtmlDocument();
-            document.LoadHtml(html);
+            var csQuery = CQ.Create(html);
 
-            var bodyNode = document.DocumentNode.SelectSingleNode("//body");
+            csQuery["#gk-page-top"].Remove();
+            csQuery["#gk-header-top"].Remove();
+            csQuery["#gk-breadcrumbs"].Remove();
+            csQuery["#gk-bottom-wrap"].Remove();
 
-            var bodyChildren = bodyNode.SelectNodes("//body/div");
+            csQuery["html"].Css("border", "0 !important");
+            csQuery[".gk-page-wrap"].Css("padding", "0 !important");
+            csQuery["section.content"].Css("padding", "0 !important");
 
-            var contentNode = bodyNode.SelectSingleNode("//div[@class='gk-page']//article");
-            var contentNodeParent = GetTopLevelParent(contentNode, bodyNode);
+            var bodyEl = csQuery["body"];
+            var domDocument = bodyEl.Document;
 
-            var bodyChildrenRemove = bodyChildren.Where(x => x != contentNodeParent).ToList();
-            bodyChildrenRemove.ForEach(x => x.Remove());
-
-            var breadCrumbsNode = bodyNode.SelectSingleNode("//section[@id='gk-breadcrumbs']");
-            if (breadCrumbsNode != null)
-            {
-                breadCrumbsNode.Remove();
-            }
-
-            //bodyNode.ReplaceChild(contentNode, contentNodeParent);
-            return document.DocumentNode.OuterHtml;
-        }
-
-        private static HtmlNode GetTopLevelParent(HtmlNode htmlNode, HtmlNode bodyNode)
-        {
-            var parent = htmlNode.ParentNode;
-            while (parent != null && parent.ParentNode != null && parent.ParentNode != bodyNode)
-            {
-                parent = parent.ParentNode;
-            }
-
-            return parent;
+            string documentHtml = string.Join(Environment.NewLine, domDocument.ChildElements.Select(x => x.OuterHTML));
+            return documentHtml;
         }
     }
 }

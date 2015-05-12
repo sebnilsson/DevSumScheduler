@@ -1,0 +1,34 @@
+﻿@model ScheduleTable
+
+<h2>@Model.Title</h2>
+<table>
+    <thead>
+        @HeaderRow(Model.Headers)
+    </thead>
+
+    <tbody>
+        @foreach (var row in Model.Rows)
+        {
+            @Html.DisplayFor(_ => row)
+        }
+    </tbody>
+
+    @if (Model.Rows.Count > 1)
+    {
+        <tfoot>
+            @HeaderRow(Model.Headers)
+        </tfoot>
+    }
+</table>
+
+@helper HeaderRow(IEnumerable<string> headers)
+{
+    <tr>
+        <th class="table-header">&nbsp;</th>
+
+        @foreach (var header in headers)
+        {
+            <th class="table-header">@header</th>
+        }
+    </tr>
+}

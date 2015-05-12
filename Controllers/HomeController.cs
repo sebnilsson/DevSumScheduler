@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Caching;
 using System.Web.Mvc;
 
@@ -14,7 +12,11 @@ namespace DevSumScheduler.Controllers
     [Route("{action=index}", Name = "Home")]
     public class HomeController : Controller
     {
-        private const string DevSumScheduleUrl = "http://devsum.se/schema/";
+        private static readonly IEnumerable<string> ScheduleTableUrls = new[]
+                                                                            {
+                                                                                "http://www.devsum.se/dag-1-25-maj/",
+                                                                                "http://www.devsum.se/dag-2-26-maj/"
+                                                                            };
 
         private const string ScheduleTablesCacheKey = "DevSumScheduler.Controllers.HomeController.GetScheduleTables";
 
@@ -35,55 +37,89 @@ namespace DevSumScheduler.Controllers
             return View();
         }
 
-        private IList<ScheduleTable> GetScheduleTables()
+        private static readonly object ScheduleTablesLock = new object();
+
+        private ICollection<ScheduleTable> GetScheduleTables()
         {
-            var cachedScheduleTables = this.HttpContext.Cache[ScheduleTablesCacheKey] as IList<ScheduleTable>;
+            var cachedScheduleTables = this.GetCachedScheduleTables();
 
             if (cachedScheduleTables == null)
             {
-                var parseScheduleTablesTask = ParseScheduleTables();
-
-                cachedScheduleTables = (parseScheduleTablesTask ?? Enumerable.Empty<ScheduleTable>()).ToList();
-                if (!cachedScheduleTables.Any())
+                lock (ScheduleTablesLock)
                 {
-                    return null;
-                }
+                    cachedScheduleTables = this.GetCachedScheduleTables();
 
-                HttpContext.Cache.Add(
-                    ScheduleTablesCacheKey,
-                    cachedScheduleTables,
-                    null,
-                    DateTime.Now.AddHours(1),
-                    Cache.NoSlidingExpiration,
-                    CacheItemPriority.High,
-                    null);
+                    if (cachedScheduleTables == null)
+                    {
+                        cachedScheduleTables = ParseScheduleTables();
+
+                        if (!cachedScheduleTables.Any())
+                        {
+                            return null;
+                        }
+
+                        HttpContext.Cache.Add(
+                            ScheduleTablesCacheKey,
+                            cachedScheduleTables,
+                            null,
+                            DateTime.Now.AddHours(1),
+                            Cache.NoSlidingExpiration,
+                            CacheItemPriority.High,
+                            null);
+                    }
+                }
             }
 
             return cachedScheduleTables;
         }
 
-        private static IEnumerable<ScheduleTable> ParseScheduleTables()
+        private ICollection<ScheduleTable> GetCachedScheduleTables()
+        {
+            var cachedScheduleTables = this.HttpContext.Cache[ScheduleTablesCacheKey] as ICollection<ScheduleTable>;
+            return cachedScheduleTables;
+        }
+
+        private static ICollection<ScheduleTable> ParseScheduleTables()
         {
             try
             {
-                using (var client = new HttpClient())
-                {
-                    var responseTask = client.GetAsync(DevSumScheduleUrl);
-                    responseTask.Wait();
-
-                    var response = responseTask.Result;
-
-                    var contentTask = response.Content.ReadAsStringAsync();
-                    contentTask.Wait();
-
-                    string html = contentTask.Result;
-
-                    return ScheduleTable.ParseHtml(html);
-                }
+                var scheduleTables = ParseScheduleTablesInternal();
+                return scheduleTables.ToList();
             }
             catch (Exception)
             {
-                return Enumerable.Empty<ScheduleTable>();
+                return new ScheduleTable[0];
+            }
+        }
+
+        private static IEnumerable<ScheduleTable> ParseScheduleTablesInternal()
+        {
+            foreach (var scheduleTableUrl in ScheduleTableUrls)
+            {
+                string html = GetScheduleTableHtml(scheduleTableUrl);
+
+                var scheduleTables = ScheduleTable.ParseHtml(html);
+                foreach (var scheduleTable in scheduleTables)
+                {
+                    yield return scheduleTable;
+                }
+            }
+        }
+
+        private static string GetScheduleTableHtml(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                var responseTask = client.GetAsync(url);
+                responseTask.Wait();
+
+                var response = responseTask.Result;
+
+                var contentTask = response.Content.ReadAsStringAsync();
+                contentTask.Wait();
+
+                string html = contentTask.Result;
+                return html;
             }
         }
     }

@@ -1,49 +1,51 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 
-using HtmlAgilityPack;
+using CsQuery;
 
 namespace DevSumScheduler.ViewModels
 {
     public class ScheduleItem
     {
-        public string Location { get; private set; }
-
         public string Speaker { get; private set; }
 
         public string SpeakerUrl { get; private set; }
 
         public string Title { get; private set; }
 
-        public static IEnumerable<ScheduleItem> FromHtmlNode(HtmlNode htmlNode)
+        public static IEnumerable<ScheduleItem> FromColumns(CQ columnElements)
         {
-            var itemEls = htmlNode.SelectNodes("div/div");
-            foreach (var itemEl in itemEls)
+            for (int i = 0; i < columnElements.Length; i++)
             {
-                yield return GetScheduleItem(itemEl);
+                var columnElement = columnElements.Eq(i);
+
+                var item = GetScheduleItem(columnElement);
+                if (item != null)
+                {
+                    yield return item;
+                }
             }
         }
 
-        private static ScheduleItem GetScheduleItem(HtmlNode htmlNode)
+        private static ScheduleItem GetScheduleItem(CQ htmlNode)
         {
-            var locationEl = htmlNode.SelectSingleNode("p/strong");
-            string location = (locationEl != null) ? (locationEl.InnerText ?? string.Empty).Trim() : null;
+            var eventHeaderEl = htmlNode.Find(".event_header");
 
-            var infoEl = htmlNode.SelectSingleNode("p[position()>1]");
-            var titleEl = (infoEl != null) ? infoEl.SelectSingleNode("a") : null;
-            var speakerEl = (infoEl != null) ? infoEl.SelectSingleNode("small") : null;
+            string title = (eventHeaderEl.Text() ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                return null;
+            }
 
-            string title = (titleEl != null) ? (titleEl.InnerText ?? string.Empty).Trim() : null;
-            string speaker = (speakerEl != null) ? (speakerEl.InnerText ?? string.Empty).Trim() : null;
-            string speakerUrl = (titleEl != null) ? titleEl.GetAttributeValue("href", string.Empty).Trim() : null;
-            speakerUrl = (speakerUrl != "#") ? speakerUrl : null;
+            string speaker = (htmlNode.Find(".before_hour_text").Text() ?? string.Empty).Trim();
+            speaker = !string.IsNullOrWhiteSpace(speaker) ? speaker : null;
 
+            string speakerUrl = !string.IsNullOrWhiteSpace(speaker) ? (eventHeaderEl.Attr("href")) : null;
+            
             return new ScheduleItem
                        {
-                           Location = WebUtility.HtmlDecode(location),
-                           Speaker = WebUtility.HtmlDecode(speaker),
+                           Speaker = speaker,
                            SpeakerUrl = speakerUrl,
-                           Title = WebUtility.HtmlDecode(title)
+                           Title = title
                        };
         }
     }

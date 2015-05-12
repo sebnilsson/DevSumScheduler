@@ -1,0 +1,35 @@
+﻿@model ScheduleRow
+
+<tr data-row-id="@Model.GetRowId()">
+    <td class="row-item-label">@Model.Label</td>
+
+    @if (Model.Items.Count > 1)
+    {
+        @Row(Model)
+    }
+    else
+    {
+        var item = Model.Items.FirstOrDefault();
+        if (item != null)
+        {
+            @Row(Model, Model.Table.Headers.Count)
+        }
+    }
+</tr>
+
+@helper Row(ScheduleRow row, int? colSpan = null)
+{
+    string cssClass = row.Items.Count > 1 ? "row-item-multiple" : "row-item-single";
+
+    for (int i = 0; i < row.Table.Headers.Count; i++)
+    {
+        var item = row.Items.ElementAtOrDefault(i);
+
+        if (item != null)
+        {
+            <td class="row-item @cssClass" colspan="@colSpan">
+                @Html.DisplayFor(_ => item)
+            </td>
+        }
+    }
+}

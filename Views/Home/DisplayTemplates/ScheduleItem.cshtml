@@ -1,0 +1,23 @@
+﻿@model ScheduleItem
+
+<span class="item-title">@Html.Raw(Model.Title)</span>
+<div class="clear"></div>
+
+@if (!string.IsNullOrWhiteSpace(Model.Speaker) || !string.IsNullOrWhiteSpace(Model.SpeakerUrl))
+{
+    <span class="item-speaker">
+        @if (!string.IsNullOrWhiteSpace(Model.SpeakerUrl))
+        {
+            <a href="@Model.SpeakerUrl"
+               data-fancybox-href="@Url.HttpRouteUrl("ApiSpeakers", new { devSumSpeakerUrl = Model.SpeakerUrl })"
+               class="fancybox">
+                @Html.Raw(Model.Speaker)
+            </a>
+        }
+        else if (!string.IsNullOrWhiteSpace(Model.Speaker))
+        {
+            @Html.Raw(Model.Speaker)
+        }
+        <div class="clear"></div>
+    </span>
+}

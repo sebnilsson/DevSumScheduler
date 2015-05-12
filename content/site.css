@@ -106,7 +106,7 @@ nav ul li a, nav ul li a:hover, nav ul li a:active, nav ul li a:visited {
     background-color: #71BC78;
 }
 
-#schedule-tables table tbody .row-item-time {
+#schedule-tables table tbody .row-item-label {
     background-color: #ccc;
     border-right: 1px solid #000;
     font-size: 0.9em;
