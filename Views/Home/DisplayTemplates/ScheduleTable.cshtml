@@ -1,25 +1,28 @@
 ﻿@model ScheduleTable
 
-<h2>@Model.Title</h2>
-<table>
-    <thead>
-        @HeaderRow(Model.Headers)
-    </thead>
+<h2 class="container">@Model.Title</h2>
 
-    <tbody>
-        @foreach (var row in Model.Rows)
-        {
-            @Html.DisplayFor(_ => row)
-        }
-    </tbody>
-
-    @if (Model.Rows.Count > 1)
-    {
-        <tfoot>
+<div class="container schedule-table">
+    <table>
+        <thead>
             @HeaderRow(Model.Headers)
-        </tfoot>
-    }
-</table>
+        </thead>
+
+        <tbody>
+            @foreach (var row in Model.Rows)
+            {
+                @Html.DisplayFor(_ => row)
+            }
+        </tbody>
+
+        @if (Model.Rows.Count > 1)
+        {
+            <tfoot>
+                @HeaderRow(Model.Headers)
+            </tfoot>
+        }
+    </table>
+</div>
 
 @helper HeaderRow(IEnumerable<string> headers)
 {

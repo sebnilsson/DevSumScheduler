@@ -140,7 +140,7 @@
             return;
         }
 
-        var instructionMessage = $('<div><p>Click on a session to highlight it.</p></div>').click(function() {
+        var instructionMessage = $('<div class="alert alert-info"><p>Click on a session to highlight it.</p></div>').click(function () {
             amplify.store('supressInstructions', true);
         });
 

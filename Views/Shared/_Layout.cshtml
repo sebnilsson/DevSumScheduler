@@ -23,11 +23,21 @@
     
     <script>document.documentElement.className = 'js';</script>
 
-    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material.min.css" />*@
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" />
+
     @Html.CssBundleTag("site")
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
+    
+    <noscript>
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet" type="text/css">
+    </noscript>
+    <script src="//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
+    <script>
+        document.documentElement.className = document.documentElement.className.replace('no-js', 'js js-loading'); WebFont.load({ google: { families: ['Open+Sans:400,300,700', 'Open+Sans+Condensed:300,700'] } });
+    </script>
 </head>
 <body>
     <div id="no-js-message">
@@ -38,41 +48,31 @@
         <strong>Your browser doesn't support <a href="http://www.w3.org/TR/webstorage/">LocalStorage</a></strong>,
         so you cannot save your preferences.
     </div>*@
-    <div id="messages">
+    @Html.Partial("_Navigation")
+    <section id="messages">
         @*<div><p>Test-message with content goes here</p></div>*@
-    </div>
-    <header>
-        <nav>
-            <ul id="menu">
-                <li>
-                    <a href="@Url.Home()">Home</a>
-                </li>
-                <li>
-                    <a href="@Url.About()">About</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <div id="main-wrapper">
-        <section id="main-content">
-            @RenderBody()
-        </section>
+    </section>
+    <section id="main-wrapper">
+        @RenderBody()
         
-        <section id="ad">
-            <div class="img-wrap">
-                <img src="~/content/offerta_logo.png" />
+        <div id="ad" class="container panel panel-default">
+            <div class="media">
+                <div class="media-left">
+                    <a href="http://offerta.se/jobb/">
+                        <img src="~/content/offerta_logo.png" alt="Offerta.se" />
+                    </a>
+                </div>
+                <div class="media-body">
+                    <a href="http://offerta.se/jobb/" target="_blank">Vi söker .NET-utvecklare på Offerta.se</a>
+                    som brinner för att skapa produkter som inte suger.
+                </div>
             </div>
-            <div class="text-wrap">
-                <a href="http://offerta.se/jobb/" target="_blank">Vi söker .NET utvecklare på Offerta.se</a>
-                som brinner för att skapa produkter som inte suger.
-            </div>
-            <div class="clear"></div>
-        </section>
-
-        <section id="devsum-link">
+        </div>
+        
+        <section id="devsum-link" class="container alert alert-info">
             Original data retrieved from <a href="http://devsum.se/schema/">DevSum's schedule</a>.
         </section>
-    </div>
+    </section>
     <footer>
         © Copyright @DateTime.Today.Year <a href="http://www.sebnilsson.com">Seb Nilsson</a>, who you can also <a href="http://www.twitter.com/sebnilsson">follow on Twitter</a>
     </footer>

@@ -194,6 +194,7 @@
     <Content Include="Views\Home\DisplayTemplates\ScheduleTable.cshtml" />
     <Content Include="Views\Home\DisplayTemplates\ScheduleItem.cshtml" />
     <Content Include="Views\Home\DisplayTemplates\ScheduleRow.cshtml" />
+    <Content Include="Views\Shared\_Navigation.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -37,12 +37,9 @@ namespace DevSumScheduler.ViewModels
 
         public string GetRowId()
         {
-            var titleFirstPartIndex = this.Label.IndexOf(',');
-            string titleFirstPart = (titleFirstPartIndex >= 0)
-                                        ? this.Label.Substring(0, titleFirstPartIndex)
-                                        : this.Label;
+            string tableTitle = this.Table.Title;
 
-            string key = string.Concat(titleFirstPart, "-", this.Label).ToLowerInvariant();
+            string key = string.Format("{0}-{1}", tableTitle, this.Label).ToLowerInvariant();
             return HttpUtility.HtmlAttributeEncode(key);
         }
 

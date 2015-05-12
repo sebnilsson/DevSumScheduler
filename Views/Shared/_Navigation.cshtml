@@ -1,0 +1,23 @@
+﻿@{
+    string currentUrl = Url.Content(Request.AppRelativeCurrentExecutionFilePath).TrimEnd('/');
+}
+
+<header>
+    <nav>
+        <ul id="menu" class="nav nav-tabs">
+            @NavItem(Url.Home(), "Scheduler", currentUrl)
+            @NavItem(Url.About(), "About", currentUrl)
+        </ul>
+    </nav>
+</header>
+
+@helper NavItem(string url, string title, string currentUrl)
+{
+    string trimmedUrl = url.TrimEnd('/');
+    bool isActive = trimmedUrl == currentUrl;
+    string activeClass = isActive ? "active" : null;
+
+    <li class="@activeClass">
+        <a href="@url">@title</a>
+    </li>
+}

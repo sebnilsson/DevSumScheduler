@@ -1,13 +1,14 @@
 @model IEnumerable<ScheduleTable>
 
-<h1>DevSum-scheduler</h1>
+<h1 id="site-head" class="container">DevSum-scheduler</h1>
 
 <div id="schedule-tables">
     @Html.DisplayForModel()
 </div>
 
-<div class="clear"></div>
-<div id="bottom-toolbar" class="js">
-    <a id="reset-choices" href="#">Clear track selections</a>
+<div id="bottom-toolbar" class="js container">
+    <p>
+        <a id="reset-choices" href="#" class="btn btn-danger pull-right">Clear track selections</a>
+        <div class="clearfix"></div>
+    </p>
 </div>
-<div class="clear"></div>
