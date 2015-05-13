@@ -8,8 +8,8 @@
         @if (!string.IsNullOrWhiteSpace(Model.SpeakerUrl))
         {
             <a href="@Model.SpeakerUrl"
-               data-fancybox-href="@Url.HttpRouteUrl("ApiSpeakers", new { devSumSpeakerUrl = Model.SpeakerUrl })"
-               class="fancybox">
+                data-fancybox-href="@Url.HttpRouteUrl("ApiSpeakers", new { devSumSpeakerUrl = Model.SpeakerUrl })"
+                class="fancybox">
                 @Html.Raw(Model.Speaker)
             </a>
         }
@@ -17,6 +17,5 @@
         {
             @Html.Raw(Model.Speaker)
         }
-        <div class="clear"></div>
     </div>
 }

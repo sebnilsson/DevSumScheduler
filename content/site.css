@@ -78,6 +78,7 @@ html.no-js .js {
     position: relative;
     text-align: center;
     vertical-align: middle;
+    width: 25%;
 }
 
 .row-item:not(:first-child):not(:last-child) {
@@ -85,20 +86,19 @@ html.no-js .js {
     border-right: 1px solid #000;
 }
 
-.item-title {
-    padding-bottom: 1em;
-}
-
 .item-speaker {
-    font-size: 0.8em;
-    padding-right: 0.25em;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    font-size: 0.85em;
+    text-align: right;
+    width: 100%;
 }
 
 .row-item-single {
     cursor: inherit;
+}
+
+.row-item-single .item-speaker {
+    right: inherit;
+    width: 100%;
 }
 
 #schedule-tables.ready table tr.has-selected-item .row-item:not(.selected-row-item) {
@@ -115,9 +115,6 @@ footer {
     font-size: 0.9em;
     margin-top: 0.5em;
     padding: 10px;
-}
-footer a, footer a:hover, footer a:active, footer a:visited {
-    color: #88f;
 }
 
 html.js #messages div {
@@ -140,21 +137,21 @@ html.js #messages div p {
     vertical-align: middle;
 }
 
-@media screen and (max-width: 1024px) {
+/*@media screen and (max-width: 1024px) {
     body{
         font-size: 0.85em;
     }
-}
+}*/
 
 @media screen and (max-width: 768px) {
     body{
-        font-size: 0.8em;
+        font-size: 0.9em;
     }
 }
 
 @media screen and (max-width: 640px) {
     body{
-        font-size: 0.7em;
+        font-size: 0.85em;
     }
     header {
         text-align: center;
@@ -166,10 +163,6 @@ html.js #messages div p {
 }
 
 @media screen and (max-width: 320px) {
-    body{
-        font-size: 0.6em;
-    }
-
     #site-head {
         font-size: 33px;
     }
