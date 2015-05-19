@@ -14,26 +14,6 @@
         hasSelectedItemClass = 'has-selected-item';
 
     function initFancybox() {
-        //$('.fancybox').click(function(e) {
-        //    e.preventDefault();
-
-        //    var $this = $(this),
-        //        href = $this.data('href') || $this.prop('href');
-
-        //    $.ajax({
-        //        url: href,
-        //        success: function(result) {
-        //            $.fancybox.open({
-        //                type: 'iframe',
-        //                content: result,
-        //                tpl: {
-        //                    wrap: ''
-        //                }
-        //            });
-        //        }
-        //    });
-        //});
-
         $('.fancybox').fancybox({
             type: 'iframe'
         });
@@ -132,6 +112,10 @@
     }
 
     function showInstructions() {
+        if (!$('#schedule-tables').length) {
+            return;
+        }
+
         $(document).on('click', '#messages div', function() {
             $(this).remove();
         });
@@ -140,7 +124,7 @@
             return;
         }
 
-        var instructionMessage = $('<div class="alert alert-info"><p>Click on a session to highlight it.</p></div>').click(function () {
+        var instructionMessage = $('<div class="alert alert-info"><p>Click on a session to highlight it.</p></div>').click(function() {
             amplify.store('supressInstructions', true);
         });
 
