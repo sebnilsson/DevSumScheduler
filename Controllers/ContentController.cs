@@ -42,10 +42,10 @@ namespace DevSumScheduler.Controllers
         [OutputCache(VaryByParam = "fileName", Duration = 43200)]
         public ActionResult Resource(string fileName, string fileExtension)
         {
-            string filePath = Server.MapPath(string.Format("~/Resources/{0}.{1}", fileName, fileExtension));
+            string filePath = this.Server.MapPath(string.Format("~/Resources/{0}.{1}", fileName, fileExtension));
             var fileContent = System.IO.File.ReadAllText(filePath, Encoding.UTF8);
 
-            return Content(fileContent, "text/cache-manifest");
+            return this.Content(fileContent, "text/cache-manifest");
         }
 
         private ActionResult GetWrappedBundleResult(Func<ActionResult> actionFactory)

@@ -13,6 +13,8 @@ namespace DevSumScheduler.Controllers.Api
     [Route("api/speakers/{action=index}", Name = "ApiSpeakers")]
     public class SpeakersController : ApiController
     {
+        private static readonly NamedLock CacheLock = new NamedLock();
+        
         private static readonly Regex DevSumSpeakerUrlRegex = new Regex(@"^https?:\/\/(?:www.)?devsum.se/speaker/");
 
         [HttpGet]
@@ -25,27 +27,40 @@ namespace DevSumScheduler.Controllers.Api
 
             devSumSpeakerUrl = devSumSpeakerUrl.ToLowerInvariant();
 
-            string speakerContent = await GetCachedSpeakerContent(devSumSpeakerUrl);
+            string speakerContent = await GetSpeakerContent(devSumSpeakerUrl);
             return this.Ok(speakerContent);
         }
 
-        private static async Task<string> GetCachedSpeakerContent(string devSumSpeakerUrl)
+        private static async Task<string> GetSpeakerContent(string devSumSpeakerUrl)
         {
-            var cachedSpeakerContent = MemoryCache.Default[devSumSpeakerUrl] as string;
+            string cacheKey = $"DevSumScheduler.Controllers.Api.SpeakersController?devSumSpeakerUrl={devSumSpeakerUrl}";
+
+            var cachedSpeakerContent = MemoryCache.Default[cacheKey] as string;
 
             if (cachedSpeakerContent == null)
             {
-                var speakerContent = await GetSpeakerContent(devSumSpeakerUrl);
+                await CacheLock.RunWithLock(
+                    cacheKey,
+                    async () =>
+                        {
+                            cachedSpeakerContent = MemoryCache.Default[cacheKey] as string;
 
-                MemoryCache.Default.Add(devSumSpeakerUrl, speakerContent, DateTime.Now.AddHours(1));
+                            if (cachedSpeakerContent == null)
+                            {
+                                cachedSpeakerContent = await GetSpeakerContentInternal(devSumSpeakerUrl);
 
-                cachedSpeakerContent = speakerContent;
+                                MemoryCache.Default.Add(
+                                    cacheKey,
+                                    cachedSpeakerContent,
+                                    DateTime.Now.AddHours(1));
+                            }
+                        });
             }
 
             return cachedSpeakerContent;
         }
 
-        private static async Task<string> GetSpeakerContent(string devSumSpeakerUrl)
+        private static async Task<string> GetSpeakerContentInternal(string devSumSpeakerUrl)
         {
             string html;
             using (var client = new HttpClient())
@@ -61,10 +76,8 @@ namespace DevSumScheduler.Controllers.Api
 
             var csQuery = CQ.Create(html);
 
-            csQuery["#gk-page-top"].Remove();
-            csQuery["#gk-header-top"].Remove();
-            csQuery["#gk-breadcrumbs"].Remove();
-            csQuery["#gk-bottom-wrap"].Remove();
+            csQuery["header"].Remove();
+            csQuery["footer"].Remove();
 
             csQuery["html"].Css("border", "0 !important");
             csQuery[".gk-page-wrap"].Css("padding", "0 !important");

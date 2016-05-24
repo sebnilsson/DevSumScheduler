@@ -12,11 +12,11 @@ namespace DevSumScheduler.ViewModels
         {
             if (title == null)
             {
-                throw new ArgumentNullException("title");
+                throw new ArgumentNullException(nameof(title));
             }
             if (headers == null)
             {
-                throw new ArgumentNullException("headers");
+                throw new ArgumentNullException(nameof(headers));
             }
 
             this.Title = GetShortTitle(title);
@@ -25,11 +25,11 @@ namespace DevSumScheduler.ViewModels
             this.Rows = new List<ScheduleRow>();
         }
 
-        public string Title { get; private set; }
+        public string Title { get; }
 
-        public ICollection<string> Headers { get; private set; }
+        public ICollection<string> Headers { get; }
 
-        public ICollection<ScheduleRow> Rows { get; private set; }
+        public ICollection<ScheduleRow> Rows { get; }
 
         public static IEnumerable<ScheduleTable> ParseHtml(string pageHtml)
         {
@@ -51,7 +51,7 @@ namespace DevSumScheduler.ViewModels
 
         private static IEnumerable<ScheduleTableDay> GetScheduleTableDays(CQ pageQuery)
         {
-            var titleElement = pageQuery.Find("header h1");
+            var titleElement = pageQuery.Find("h1");
 
             var tableElement = pageQuery.Find("#all-events table.tt_timetable");
 
@@ -70,13 +70,13 @@ namespace DevSumScheduler.ViewModels
 
         private static ScheduleTable FromScheduleDay(ScheduleTableDay scheduleTableDay)
         {
-            string title = (scheduleTableDay.TitleElement.Text() ?? string.Empty).Trim();
+            string title = scheduleTableDay.TitleElement.Text();
 
             var headers = GetHeaders(scheduleTableDay.TableElement).ToList();
 
             var scheduleTable = new ScheduleTable(title, headers);
 
-            var rows = ScheduleRow.FromTable(scheduleTable, scheduleTableDay.TableElement);
+            var rows = ScheduleRow.FromTable(scheduleTable, scheduleTableDay.TableElement).ToList();
             foreach (var row in rows)
             {
                 scheduleTable.Rows.Add(row);

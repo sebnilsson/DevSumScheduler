@@ -13,67 +13,63 @@ namespace DevSumScheduler.ViewModels
         {
             if (table == null)
             {
-                throw new ArgumentNullException("table");
+                throw new ArgumentNullException(nameof(table));
             }
             if (title == null)
             {
-                throw new ArgumentNullException("title");
+                throw new ArgumentNullException(nameof(title));
             }
             if (items == null)
             {
-                throw new ArgumentNullException("items");
+                throw new ArgumentNullException(nameof(items));
             }
 
             this.Table = table;
-            this.Label = title;
+            this.Title = title;
             this.Items = items;
         }
 
-        public ScheduleTable Table { get; private set; }
+        public ScheduleTable Table { get; }
 
-        public string Label { get; private set; }
+        public string Title { get; }
 
-        public IList<ScheduleItem> Items { get; private set; }
+        public IList<ScheduleItem> Items { get; }
 
         public string GetRowId()
         {
             string tableTitle = this.Table.Title;
 
-            string key = string.Format("{0}-{1}", tableTitle, this.Label).ToLowerInvariant();
-            return HttpUtility.HtmlAttributeEncode(key);
+            string key = $"{tableTitle}-{this.Title}".ToLowerInvariant();
+
+            string encodedKey = HttpUtility.UrlEncode(key) ?? string.Empty;
+            encodedKey = HttpUtility.HtmlAttributeEncode(encodedKey);
+
+            return encodedKey;
         }
 
         public static IEnumerable<ScheduleRow> FromTable(ScheduleTable table, CQ tableElement)
         {
-            var rowElements = tableElement.Find("tbody tr");
+            var groupedItems = FromTable(tableElement).GroupBy(x => new { x.StartTime, x.EndTime }).ToList();
 
-            for (int i = 0; i < rowElements.Length; i++)
+            foreach (var group in groupedItems)
             {
-                var rowElement = rowElements.Eq(i);
+                var items = group.GroupBy(x => x.Title).Select(x => x.First()).ToList();
 
-                var colElements = rowElement.Find("td");
+                string title = $"{group.Key.StartTime.ToString(@"hh\:mm")} - {group.Key.EndTime.ToString(@"hh\:mm")}";
 
-                if (colElements.Length < 5)
-                {
-                    continue;
-                }
+                yield return new ScheduleRow(table, title, items);
+            }
+        }
 
-                var firstColEl = colElements.Eq(1);
+        private static IEnumerable<ScheduleItem> FromTable(CQ tableElement)
+        {
+            var itemElements = tableElement.Find("tbody tr .event .event_container");
 
-                string startTime = (firstColEl.Find(".top_hour span").Text() ?? string.Empty).Trim();
-                string endTime = (firstColEl.Find(".bottom_hour span").Text() ?? string.Empty).Trim();
+            for (int i = 0; i < itemElements.Length; i++)
+            {
+                var item = itemElements.Eq(i);
 
-                if (string.IsNullOrWhiteSpace(startTime) || string.IsNullOrWhiteSpace(endTime))
-                {
-                    continue;
-                }
-
-                string timeText = string.Format("{0} - {1}", startTime, endTime);
-
-                var items = ScheduleItem.FromColumns(colElements).ToList();
-
-                var row = new ScheduleRow(table, timeText, items);
-                yield return row;
+                yield return ScheduleItem.Parse(item);
             }
         }
     }
