@@ -13,8 +13,10 @@ namespace DevSumScheduler.Controllers.Api
     [Route("api/speakers/{action=index}", Name = "ApiSpeakers")]
     public class SpeakersController : ApiController
     {
+        private const int CacheExpirationMinutes = 60;
+
         private static readonly NamedLock CacheLock = new NamedLock();
-        
+
         private static readonly Regex DevSumSpeakerUrlRegex = new Regex(@"^https?:\/\/(?:www.)?devsum.se/speaker/");
 
         [HttpGet]
@@ -52,7 +54,7 @@ namespace DevSumScheduler.Controllers.Api
                                 MemoryCache.Default.Add(
                                     cacheKey,
                                     cachedSpeakerContent,
-                                    DateTime.Now.AddHours(1));
+                                    DateTime.Now.AddMinutes(CacheExpirationMinutes));
                             }
                         });
             }

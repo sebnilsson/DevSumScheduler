@@ -10,6 +10,8 @@ namespace DevSumScheduler
 {
     public static class ScheduleService
     {
+        private const int CacheExpirationMinutes = 30;
+
         private const string ScheduleTablesCacheKey = "DevSumScheduler.ScheduleService.GetScheduleTables";
 
         private static readonly NamedLock CacheLock = new NamedLock();
@@ -48,7 +50,7 @@ namespace DevSumScheduler
                                 MemoryCache.Default.Add(
                                     ScheduleTablesCacheKey,
                                     cachedScheduleTables,
-                                    DateTime.Now.AddHours(1));
+                                    DateTime.Now.AddMinutes(CacheExpirationMinutes));
                             }
                         });
             }
