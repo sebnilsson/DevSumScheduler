@@ -80,10 +80,13 @@ namespace DevSumScheduler.Controllers.Api
 
             csQuery["header"].Remove();
             csQuery["footer"].Remove();
+            csQuery[".gdlr-page-title-wrapper"].Remove();
 
             csQuery["html"].Css("border", "0 !important");
             csQuery[".gk-page-wrap"].Css("padding", "0 !important");
             csQuery["section.content"].Css("padding", "0 !important");
+            csQuery[".gdlr-item-start-content"].Css("margin", "0").Css("padding", "0").Css("padding-top", "1em");
+            csQuery[".gdlr-speaker-content"].Css("margin-bottom", "1em");
 
             var bodyEl = csQuery["body"];
             var domDocument = bodyEl.Document;

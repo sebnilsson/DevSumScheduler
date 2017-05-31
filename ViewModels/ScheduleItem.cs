@@ -40,8 +40,8 @@ namespace DevSumScheduler.ViewModels
             string startTimeText = element.Find(".top_hour span").First().Text();
             string endTimeText = element.Find(".bottom_hour span").First().Text();
 
-            var startTime = TimeSpan.ParseExact(startTimeText, "g", CultureInfo.InvariantCulture);
-            var endTime = TimeSpan.ParseExact(endTimeText, "g", CultureInfo.InvariantCulture);
+            var startTime = DateTime.ParseExact(startTimeText, "HH.mm", CultureInfo.InvariantCulture).TimeOfDay;
+            var endTime = DateTime.ParseExact(endTimeText, "HH.mm", CultureInfo.InvariantCulture).TimeOfDay;
 
             return new ScheduleItem(title, speaker, speakerUrl, startTime, endTime);
         }

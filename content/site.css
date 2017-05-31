@@ -78,7 +78,7 @@ html.no-js .js {
     position: relative;
     text-align: center;
     vertical-align: middle;
-    width: 25%;
+    width: 20%;
 }
 
 .row-item:not(:first-child):not(:last-child) {

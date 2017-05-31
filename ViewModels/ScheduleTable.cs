@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 using CsQuery;
 
@@ -51,7 +52,7 @@ namespace DevSumScheduler.ViewModels
 
         private static IEnumerable<ScheduleTableDay> GetScheduleTableDays(CQ pageQuery)
         {
-            var titleElement = pageQuery.Find("h1");
+            var titleElement = pageQuery.Find(".gdlr-item-title");
 
             var tableElement = pageQuery.Find("#all-events table.tt_timetable");
 
@@ -89,7 +90,8 @@ namespace DevSumScheduler.ViewModels
         {
             var headers = tableElement.Find("thead tr th").Skip(1).ToList();
 
-            var headerTexts = headers.Select(x => (x.InnerText ?? string.Empty).Trim());
+            var headerTexts = headers.Select(x => WebUtility.HtmlDecode(x.InnerText ?? string.Empty).Trim());
+
             return headerTexts;
         }
 
