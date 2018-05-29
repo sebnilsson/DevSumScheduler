@@ -39,3 +39,4 @@ node_modules
 **/AppSettings.Injected.config
 **/appsettings.secrets.json
 **/launchSettings.json
+/.vs

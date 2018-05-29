@@ -17,4 +17,8 @@
     <ProjectReference Include="..\DevSumScheduler\DevSumScheduler.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\dist\" />
+  </ItemGroup>
+
 </Project>

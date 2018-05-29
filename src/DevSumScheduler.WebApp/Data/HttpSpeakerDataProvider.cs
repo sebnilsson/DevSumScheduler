@@ -25,11 +25,15 @@ namespace DevSumScheduler.WebApp.Data
             var substitute = dom["#gdlr-header-substitute"];
             var titleWrapper = dom[".gdlr-page-title-wrapper"];
             var footer = dom[".footer-wrapper"];
+            var buttons = dom[".gdlr-button"];
+            var scripts = dom["script"];
 
             header.Remove();
             substitute.Remove();
             titleWrapper.Remove();
             footer.Remove();
+            buttons.Remove();
+            scripts.Remove();
 
             var startContent = dom[".gdlr-item-start-content"];
             startContent.Css("padding-top", "25px");

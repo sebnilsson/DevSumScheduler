@@ -4,29 +4,33 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DevSum Scheduler by Seb Nilsson</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.css" />
+
     <link rel="stylesheet" href="~/site.css" />
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <span class="navbar-brand">DevSum Scheduler</span>
-            </div>
-        </div>
-    </nav>
-    <div class="container body-content">
+    <div class="body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>
-                &copy; @DateTime.Today.Year - DevSum Scheduler by <a href="https://sebnilsson.com">Seb Nilsson</a>
-            </p>
+
+        <footer class="bg-secondary text-white border-top mt-3 pt-3 pb-3">
+            <div class="container">
+                <p class="card-text">
+                    &copy; @DateTime.Today.Year - DevSum Scheduler by <a href="https://sebnilsson.com" class="bg-light">Seb Nilsson</a>
+                </p>
+            </div>
         </footer>
     </div>
-    
+
     @*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js"></script>*@
-    <script src="~/site.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.3.5/jquery.fancybox.min.js"></script>
+
+    <script src="~/dist/app.js"></script>
 </body>
 </html>

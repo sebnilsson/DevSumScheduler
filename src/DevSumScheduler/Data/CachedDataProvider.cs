@@ -22,8 +22,18 @@ namespace DevSumScheduler.Data
         {
             var key = $"{nameof(CachedDataProvider)}.{nameof(GetData)}";
 
-            return await _keyLock.RunWithLock(key,
-                () => _cache.GetOrCreateAsync("GetData", _ => _dataProvider.GetData()));
+            try
+            {
+                return await _keyLock.RunWithLock(key,
+                    () => _cache.GetOrCreateAsync(key, _ => _dataProvider.GetData()));
+            }
+            catch (InvalidCastException)
+            {
+                _cache.Remove(key);
+
+                return await _keyLock.RunWithLock(key,
+                    () => _cache.GetOrCreateAsync(key, _ => _dataProvider.GetData()));
+            }
         }
     }
 }

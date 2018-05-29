@@ -21,8 +21,18 @@ namespace DevSumScheduler.Data
         {
             var key = $"{nameof(CachedSpeakerDataProvider)}.{nameof(GetData)}.{slug}";
 
-            return await _keyLock.RunWithLock(key,
-                () => _cache.GetOrCreateAsync("GetData", _ => _dataProvider.GetData(slug)));
+            try
+            {
+                return await _keyLock.RunWithLock(key,
+                    () => _cache.GetOrCreateAsync(key, _ => _dataProvider.GetData(slug)));
+            }
+            catch (InvalidCastException)
+            {
+                _cache.Remove(key);
+
+                return await _keyLock.RunWithLock(key,
+                    () => _cache.GetOrCreateAsync(key, _ => _dataProvider.GetData(slug)));
+            }
         }
     }
 }

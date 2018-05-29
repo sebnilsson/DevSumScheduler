@@ -1,1 +1,15 @@
-﻿
+﻿.clickable {
+    cursor: pointer;
+}
+
+tbody th {
+    vertical-align: middle;
+}
+
+.fancybox-slide--iframe .fancybox-content {
+    max-width: 1140px;
+}
+
+.hidden {
+    display: none;
+}
