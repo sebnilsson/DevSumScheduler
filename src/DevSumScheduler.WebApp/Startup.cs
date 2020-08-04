@@ -47,7 +47,6 @@ namespace DevSumScheduler.WebApp
         {
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
